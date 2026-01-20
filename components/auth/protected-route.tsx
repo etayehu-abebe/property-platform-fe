@@ -14,29 +14,59 @@ export default function ProtectedRoute({
   requiredRole = "USER",
 }: ProtectedRouteProps) {
   const router = useRouter();
-  const { user, token, isLoading } = useAuthStore();
+  const { user, token, isLoading, hasHydrated } = useAuthStore();
 
-  useEffect(() => {
-    if (!isLoading && (!token || !user)) {
-      router.push("/auth/login");
-      return;
+
+
+useEffect(() => {
+  if (!hasHydrated) return; // 🚫 WAIT
+
+  if (!token) {
+    router.replace("/auth/login");
+    return;
+  }
+
+  if (!user) return; // token exists, user loading
+
+  if (requiredRole && requiredRole !== "USER") {
+    const roleHierarchy = {
+      USER: 1,
+      OWNER: 2,
+      ADMIN: 3,
+    } as const;
+
+    type Role = keyof typeof roleHierarchy;
+    const userRole = user.role as Role;
+    const required = requiredRole as Role;
+
+    if (roleHierarchy[userRole] < roleHierarchy[required]) {
+      router.replace("/dashboard");
     }
+  }
+}, [hasHydrated, token, user, requiredRole, router]);
 
-    if (!isLoading && user && requiredRole !== "USER") {
-      const roleHierarchy = {
-        USER: 1,
-        OWNER: 2,
-        ADMIN: 3,
-      };
 
-      if (
-        roleHierarchy[user.role as keyof typeof roleHierarchy] <
-        roleHierarchy[requiredRole]
-      ) {
-        router.push("/dashboard");
-      }
-    }
-  }, [user, token, isLoading, router, requiredRole]);
+  // useEffect(() => {
+  //   if (!isLoading && (!token || !user)) {
+  //     router.push("/auth/login");
+  //     return;
+  //   }
+
+  //   if (!isLoading && user && requiredRole !== "USER") {
+  //     const roleHierarchy = {
+  //       USER: 1,
+  //       OWNER: 2,
+  //       ADMIN: 3,
+  //     };
+
+  //     if (
+  //       roleHierarchy[user.role as keyof typeof roleHierarchy] <
+  //       roleHierarchy[requiredRole]
+  //     ) {
+  //       router.push("/dashboard");
+  //     }
+  //   }
+  // }, [user, token, isLoading, router, requiredRole]);
 
   if (isLoading) {
     return (

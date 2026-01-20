@@ -41,23 +41,6 @@ export default function CreatePropertyForm() {
     usePropertyMutations();
   const [imageUrls, setImageUrls] = useState<string[]>([""]);
 
-  // const {
-  //   register,
-  //   handleSubmit,
-  //   setValue,
-  //   watch,
-  //   formState: { errors },
-  // } = useForm<PropertySchema>({
-  //   resolver: zodResolver(propertySchema),
-  //   defaultValues: {
-  //     title: "",
-  //     description: "",
-  //     location: "",
-  //     price: undefined,
-  //     images: [],
-  //     status: "DRAFT",
-  //   },
-  // });
   const {
   register,
   handleSubmit,
