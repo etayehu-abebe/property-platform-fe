@@ -134,7 +134,7 @@ export default function LoginForm() {
           <p className="text-gray-600 text-sm">
             Don&apos;t have an account?{" "}
             <Link
-              href="/register"
+              href="/auth/register"
               className="text-blue-600 hover:text-blue-800 font-medium transition-colors"
             >
               Create one here

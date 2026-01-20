@@ -6,7 +6,7 @@ interface CreatePropertyData {
   title: string;
   description: string;
   location: string;
-  price: number;
+  price: number | unknown;
   images: string[];
   status?: "DRAFT" | "PUBLISHED";
 }
