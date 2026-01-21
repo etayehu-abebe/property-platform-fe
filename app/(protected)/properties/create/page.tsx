@@ -1,6 +1,6 @@
 import ProtectedRoute from "@/components/auth/protected-route";
 import CreatePropertyForm from "@/components/properties/create-property-form";
-import { Home, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 
 export default function CreatePropertyPage() {
   return (

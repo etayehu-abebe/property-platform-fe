@@ -6,9 +6,11 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { MapPin, DollarSign, Calendar } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import FavoriteButton from "./favorite-button";
 
 interface PropertyCardProps {
   property: Property;
@@ -18,7 +20,7 @@ export default function PropertyCard({ property }: PropertyCardProps) {
   const firstImage = property.images[0] || "/placeholder-property.png";
 
   return (
-    <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
+    <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300 pt-0">
       <div className="relative h-48 w-full">
         <Image
           src={firstImage}
@@ -29,7 +31,7 @@ export default function PropertyCard({ property }: PropertyCardProps) {
         />
         <div className="absolute top-3 right-3">
           <span
-            className={`px-2 py-1 rounded-full text-xs font-semibold ${
+            className={`px-2 rounded-full text-xs font-semibold ${
               property.status === "PUBLISHED"
                 ? "bg-green-100 text-green-800"
                 : property.status === "DRAFT"

@@ -1,4 +1,4 @@
-"use client"; // Make it client-side only
+"use client"; 
 
 import { User } from "@/types/auth";
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema, RegisterSchema } from "@/lib/schemas/register-schema";
 import { useAuth } from "@/hooks/use-auth";
@@ -24,7 +24,6 @@ import {
 import Link from "next/link";
 import { User, Building2, Mail, Lock, UserCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 
 export default function RegisterForm() {
   const router = useRouter();
@@ -57,6 +56,7 @@ export default function RegisterForm() {
     register,
     handleSubmit,
     watch,
+    control,
     formState: { errors },
   } = useForm<RegisterSchema>({
     resolver: zodResolver(registerSchema),
@@ -150,21 +150,27 @@ export default function RegisterForm() {
 
           <div className="space-y-2">
             <Label htmlFor="role">Role</Label>
-            <Select
-              onValueChange={(value: "USER" | "OWNER" | "ADMIN") =>
-                register("role").onChange({ target: { value } })
-              }
-              disabled={registerIsLoading}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select a role" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="USER">Regular User</SelectItem>
-                <SelectItem value="OWNER">Property Owner</SelectItem>
-                <SelectItem value="ADMIN">Administrator</SelectItem>
-              </SelectContent>
-            </Select>
+            <Controller
+              name="role"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  onValueChange={field.onChange}
+                  value={field.value}
+                  disabled={registerIsLoading}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a role" />
+                  </SelectTrigger>
+
+                  <SelectContent>
+                    <SelectItem value="USER">Regular User</SelectItem>
+                    <SelectItem value="OWNER">Property Owner</SelectItem>
+                    <SelectItem value="ADMIN">Administrator</SelectItem>
+                  </SelectContent>
+                </Select>
+              )}
+            />
             {errors.role && (
               <p className="text-sm text-destructive">{errors.role.message}</p>
             )}
@@ -177,7 +183,7 @@ export default function RegisterForm() {
                 className="flex items-center gap-2"
               >
                 <Building2 className="h-4 w-4" />
-                Organization Name {selectedRole === "OWNER" ? "(Optional)" : ""}
+                Organization Name {selectedRole === "ADMIN" ? "(Optional)" : ""}
               </Label>
               <Input
                 id="organizationName"
@@ -190,6 +196,12 @@ export default function RegisterForm() {
                   ? "Create your property management organization"
                   : "System administration organization"}
               </p>
+
+              {errors.organizationName && (
+                <p className="text-sm text-destructive">
+                  {errors.organizationName.message}
+                </p>
+              )}
             </div>
           )}
 
@@ -202,7 +214,7 @@ export default function RegisterForm() {
           <p className="text-gray-600 text-sm">
             Already have an account?{" "}
             <Link
-              href="/login"
+              href="/auth/login"
               className="text-blue-600 hover:text-blue-800 font-medium"
             >
               Sign in here

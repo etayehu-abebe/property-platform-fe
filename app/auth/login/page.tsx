@@ -1,14 +1,9 @@
 "use client";
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { useAuthStore } from "@/lib/store/auth-store";
 import LoginForm from "@/components/auth/login-form";
 
 export default function LoginPage() {
-  const router = useRouter();
-  const token = useAuthStore((state) => state.token);
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-linear-to-br from-gray-50 to-gray-100 p-4">

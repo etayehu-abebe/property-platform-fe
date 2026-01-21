@@ -1,5 +1,4 @@
 import RegisterForm from "@/components/auth/registration-form";
-import Link from "next/link";
 
 export default function RegisterPage() {
   return (
@@ -13,18 +12,6 @@ export default function RegisterPage() {
         </div>
 
         <RegisterForm />
-
-        <div className="mt-6 text-center">
-          <p className="text-gray-600">
-            Already have an account?{" "}
-            <Link
-              href="/auth/login"
-              className="text-blue-600 hover:text-blue-800 font-medium"
-            >
-              Sign in
-            </Link>
-          </p>
-        </div>
       </div>
     </div>
   );
