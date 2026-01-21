@@ -11,12 +11,14 @@ export interface LoginFormData {
   password: string;
 }
 
+export type UserRole = "USER" | "OWNER" | "ADMIN";
+
 export interface User {
   id: string;
+  name: string;
   email: string;
-  name: string | null;
-  role: string;
-  organizationId: string | null;
+  role: UserRole;
+  organizationId?: string;
   createdAt: string;
   updatedAt: string;
 }

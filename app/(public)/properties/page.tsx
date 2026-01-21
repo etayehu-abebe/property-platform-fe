@@ -47,7 +47,6 @@ export default async function PropertiesPage({
             </div>
           </aside>
 
-          {/* Properties Grid */}
           <main className="lg:w-3/4">
             <div className="flex items-center justify-between mb-6">
               <div>

@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
 import PropertyDetail from "@/components/properties/property-detail";
-// import { api } from "@/lib/api";x
 import { Property } from "@/types/property";
 
 interface PropertyPageProps {

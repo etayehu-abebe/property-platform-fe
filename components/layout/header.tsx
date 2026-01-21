@@ -28,15 +28,23 @@ export default function Header() {
           </Link>
 
           {user ? (
-            <div className="flex items-center gap-4">
-              <span className="text-sm">Hello, {user.name}</span>
-              <Link href="/dashboard">
-                <Button size="sm">Dashboard</Button>
+            <>
+              <Link
+                href={`/dashboard/${user.role.toLowerCase()}`}
+                className="rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
+              >
+                Dashboard
               </Link>
-              <Button size="sm" variant="outline" onClick={logout}>
-                Logout
-              </Button>
-            </div>
+              <div className="flex items-center gap-4">
+                <span className="text-sm">Hello, {user.name}</span>
+                <Link href="/dashboard">
+                  <Button size="sm">Dashboard</Button>
+                </Link>
+                <Button size="sm" variant="outline" onClick={logout}>
+                  Logout
+                </Button>
+              </div>
+            </>
           ) : (
             <div className="flex items-center gap-4">
               <Link href="/auth/login">

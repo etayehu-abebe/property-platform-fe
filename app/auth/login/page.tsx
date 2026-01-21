@@ -10,13 +10,6 @@ export default function LoginPage() {
   const router = useRouter();
   const token = useAuthStore((state) => state.token);
 
-  // Redirect if already logged in
-  //   useEffect(() => {
-  //     if (token) {
-  //       router.push("/dashboard");
-  //     }
-  //   }, [token, router]);
-
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-linear-to-br from-gray-50 to-gray-100 p-4">
       <div className="w-full max-w-md">

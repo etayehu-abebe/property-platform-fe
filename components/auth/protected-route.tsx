@@ -16,57 +16,32 @@ export default function ProtectedRoute({
   const router = useRouter();
   const { user, token, isLoading, hasHydrated } = useAuthStore();
 
+  useEffect(() => {
+    if (!hasHydrated) return; 
 
-
-useEffect(() => {
-  if (!hasHydrated) return; // 🚫 WAIT
-
-  if (!token) {
-    router.replace("/auth/login");
-    return;
-  }
-
-  if (!user) return; // token exists, user loading
-
-  if (requiredRole && requiredRole !== "USER") {
-    const roleHierarchy = {
-      USER: 1,
-      OWNER: 2,
-      ADMIN: 3,
-    } as const;
-
-    type Role = keyof typeof roleHierarchy;
-    const userRole = user.role as Role;
-    const required = requiredRole as Role;
-
-    if (roleHierarchy[userRole] < roleHierarchy[required]) {
-      router.replace("/dashboard");
+    if (!token) {
+      router.replace("/auth/login");
+      return;
     }
-  }
-}, [hasHydrated, token, user, requiredRole, router]);
 
+    if (!user) return; // token exists, user loading
 
-  // useEffect(() => {
-  //   if (!isLoading && (!token || !user)) {
-  //     router.push("/auth/login");
-  //     return;
-  //   }
+    if (requiredRole && requiredRole !== "USER") {
+      const roleHierarchy = {
+        USER: 1,
+        OWNER: 2,
+        ADMIN: 3,
+      } as const;
 
-  //   if (!isLoading && user && requiredRole !== "USER") {
-  //     const roleHierarchy = {
-  //       USER: 1,
-  //       OWNER: 2,
-  //       ADMIN: 3,
-  //     };
+      type Role = keyof typeof roleHierarchy;
+      const userRole = user.role as Role;
+      const required = requiredRole as Role;
 
-  //     if (
-  //       roleHierarchy[user.role as keyof typeof roleHierarchy] <
-  //       roleHierarchy[requiredRole]
-  //     ) {
-  //       router.push("/dashboard");
-  //     }
-  //   }
-  // }, [user, token, isLoading, router, requiredRole]);
+      if (roleHierarchy[userRole] < roleHierarchy[required]) {
+        router.replace("/dashboard");
+      }
+    }
+  }, [hasHydrated, token, user, requiredRole, router]);
 
   if (isLoading) {
     return (
@@ -77,7 +52,7 @@ useEffect(() => {
   }
 
   if (!token || !user) {
-    return null; // Will redirect in useEffect
+    return null; 
   }
 
   if (

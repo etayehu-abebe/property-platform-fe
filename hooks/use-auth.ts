@@ -1,75 +1,81 @@
 import { useMutation } from "@tanstack/react-query";
-import { useAuthStore } from "@/lib/store/auth-store";
 import api from "@/lib/api";
-import { RegisterFormData, LoginFormData, AuthResponse } from "@/types/auth";
+import { AuthResponse } from "@/types/auth";
+import { useAuthStore } from "@/lib/store/auth-store";
+import { LoginSchema } from "@/lib/schemas/login-schema";
+import { RegisterSchema } from "@/lib/schemas/register-schema";
 
-export const useAuth = () => {
-  const { setUser, setToken } = useAuthStore();
+interface UseAuthOptions {
+  onSuccess?: (data: AuthResponse) => void;
+  onError?: (error: Error) => void;
+}
 
-  // Register mutation
-  const registerMutation = useMutation({
-    mutationFn: async (data: RegisterFormData) => {
-      const response = await api.post<AuthResponse>("/api/auth/register", data);
-      return response.data;
-    },
-    onSuccess: (data) => {
-      setUser(data.user);
-      setToken(data.token);
-      if (typeof window !== "undefined") {
-        localStorage.setItem("token", data.token);
-      }
-    },
-  });
+export function useAuth(options?: UseAuthOptions) {
+  const { setUser, setToken, logout } = useAuthStore();
 
-  // Login mutation
   const loginMutation = useMutation({
-    mutationFn: async (data: LoginFormData) => {
+    mutationFn: async (data: LoginSchema) => {
       const response = await api.post<AuthResponse>("/api/auth/login", data);
       return response.data;
     },
     onSuccess: (data) => {
       setUser(data.user);
       setToken(data.token);
+      // Save to localStorage - using your "token" key
       if (typeof window !== "undefined") {
         localStorage.setItem("token", data.token);
+      }
+      options?.onSuccess?.(data);
+    },
+    onError: options?.onError,
+  });
+
+  const registerMutation = useMutation({
+    mutationFn: async (data: RegisterSchema) => {
+      const response = await api.post<AuthResponse>("/api/auth/register", data);
+      return response.data;
+    },
+    onSuccess: (data) => {
+      setUser(data.user);
+      setToken(data.token);
+      // Save to localStorage - using your "token" key
+      if (typeof window !== "undefined") {
+        localStorage.setItem("token", data.token);
+      }
+      options?.onSuccess?.(data);
+    },
+    onError: options?.onError,
+  });
+
+  const logoutMutation = useMutation({
+    mutationFn: async () => {
+      await api.post("/api/auth/logout");
+    },
+    onSuccess: () => {
+      logout();
+      // Clear localStorage - using your "token" key
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("token");
       }
     },
   });
 
-  const register = async (data: RegisterFormData) => {
-    return await registerMutation.mutateAsync(data);
-  };
-
-  const login = async (data: LoginFormData) => {
-    return await loginMutation.mutateAsync(data);
-  };
-
-  const logout = () => {
-    setUser(null);
-    setToken(null);
-    if (typeof window !== "undefined") {
-      localStorage.removeItem("token");
-    }
-  };
-
   return {
-    // Register
-    register,
-    registerIsLoading: registerMutation.isPending,
-    registerError: registerMutation.error?.message,
-    registerIsError: registerMutation.isError,
-    registerIsSuccess: registerMutation.isSuccess,
-
     // Login
-    login,
+    login: loginMutation.mutate,
+    loginAsync: loginMutation.mutateAsync,
     loginIsLoading: loginMutation.isPending,
-    loginError: loginMutation.error?.message,
-    loginIsError: loginMutation.isError,
-    loginIsSuccess: loginMutation.isSuccess,
+    loginError: loginMutation.error,
 
-    // Shared
-    logout,
-    user: useAuthStore((state) => state.user),
-    token: useAuthStore((state) => state.token),
+    // Register
+    register: registerMutation.mutate,
+    registerAsync: registerMutation.mutateAsync,
+    registerIsLoading: registerMutation.isPending,
+    registerError: registerMutation.error,
+
+    // Logout
+    logout: logoutMutation.mutate,
+    logoutAsync: logoutMutation.mutateAsync,
+    logoutIsLoading: logoutMutation.isPending,
   };
-};
+}

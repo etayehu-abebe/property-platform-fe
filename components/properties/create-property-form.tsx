@@ -1,9 +1,15 @@
 "use client";
 
+import ImageUpload from "@/components/shared/image-upload";
+
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { PropertyFormInput, PropertyFormOutput, propertySchema } from "@/lib/schemas/property-schema";
+import {
+  PropertyFormInput,
+  PropertyFormOutput,
+  propertySchema,
+} from "@/lib/schemas/property-schema";
 import { usePropertyMutations } from "@/hooks/use-property-mutations";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -42,23 +48,22 @@ export default function CreatePropertyForm() {
   const [imageUrls, setImageUrls] = useState<string[]>([""]);
 
   const {
-  register,
-  handleSubmit,
-  setValue,
-  watch,
-  formState: { errors },
-} = useForm<PropertyFormInput>({
-  resolver: zodResolver(propertySchema),
-  defaultValues: {
-    title: "",
-    description: "",
-    location: "",
-    price: "",
-    images: [],
-    status: "DRAFT",
-  },
-});
-
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm<PropertyFormInput>({
+    resolver: zodResolver(propertySchema),
+    defaultValues: {
+      title: "",
+      description: "",
+      location: "",
+      price: "",
+      images: [],
+      status: "DRAFT",
+    },
+  });
 
   // Watch images to sync with form
   const formImages = watch("images");
@@ -86,13 +91,13 @@ export default function CreatePropertyForm() {
     setValue("images", validUrls, { shouldValidate: true });
   };
 
-const onSubmit: SubmitHandler<PropertyFormInput> = async (data) => {
-  const parsedData: PropertyFormOutput = propertySchema.parse(data);
-  
+  const onSubmit: SubmitHandler<PropertyFormInput> = async (data) => {
+    const parsedData: PropertyFormOutput = propertySchema.parse(data);
+
     try {
       await createProperty(parsedData);
       // Success handled by mutation
-      router.push("/properties"); // Redirect to listings
+      router.push("/properties");
     } catch (error) {
       // Error handled by mutation
     }
@@ -217,7 +222,22 @@ const onSubmit: SubmitHandler<PropertyFormInput> = async (data) => {
           <div className="space-y-3">
             <Label className="flex items-center gap-2">
               <Upload className="h-4 w-4" />
-              Property Images (URLs)
+        
+              <div className="space-y-3">
+                <Label>Property Images</Label>
+                <ImageUpload
+                  onImagesChange={(urls) =>
+                    setValue("images", urls, { shouldValidate: true })
+                  }
+                  maxImages={10}
+                  existingImages={watch("images") || []}
+                />
+                {errors.images && (
+                  <p className="text-sm text-destructive">
+                    {errors.images.message}
+                  </p>
+                )}
+              </div>
             </Label>
 
             {imageUrls.map((url, index) => (

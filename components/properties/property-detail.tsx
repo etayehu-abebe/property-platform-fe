@@ -41,7 +41,6 @@ export default function PropertyDetail({ property }: PropertyDetailProps) {
 
   const handleToggleFavorite = () => {
     if (!user) {
-      // Redirect to login if not authenticated
       window.location.href = "/auth/login";
       return;
     }
