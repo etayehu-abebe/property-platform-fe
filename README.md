@@ -23,11 +23,16 @@ This project uses the following technologies:
 - ## Zustand ##  
   Lightweight and simple global state management used for authentication and user state without unnecessary boilerplate.
 
+- ## shadcn/ui ##
+  Used for accessible, reusable, and customizable UI components built on top of Radix UI and Tailwind CSS. It ensures consistent design and good UX while remaining flexible.
+
   ### Server State & Data Fetching
 - ## TanStack Query (React Query) ##  
   Used for fetching, caching, synchronizing, and updating server state.  
   It simplifies API interactions by handling loading states, caching, retries, background refetching, and optimistic updates.
 
+- ## UploadThing ##
+  Used for secure and scalable image uploads and storage. It provides a clean developer experience and integrates well with Next.js for handling property images.
 
 ### Forms & Validation
 - ## React Hook Form ##  
