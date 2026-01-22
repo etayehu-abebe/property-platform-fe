@@ -2,7 +2,6 @@
 
 import DashboardHeader from "@/components/dashboard/dashboard-header";
 import DashboardSidebar from "@/components/dashboard/dashboard-sidebar";
-import { getCurrentUser } from "@/lib/auth";
 import { useAuthStore } from "@/lib/store/auth-store";
 import { UserRole } from "@/types/auth";
 import { redirect } from "next/navigation";

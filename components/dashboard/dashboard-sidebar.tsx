@@ -60,7 +60,7 @@ export default function DashboardSidebar({ role }: DashboardSidebarProps) {
           icon: <Building2 className="h-5 w-5" />,
         },
         {
-          href: "/dashboard/owner/properties/create",
+          href: "/properties/create",
           label: "Add Property",
           icon: <Home className="h-5 w-5" />,
         },

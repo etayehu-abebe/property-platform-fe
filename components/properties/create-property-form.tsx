@@ -98,6 +98,8 @@ export default function CreatePropertyForm() {
       await createProperty(parsedData);
       // Success handled by mutation
       router.push("/properties");
+      // router.push("/dashboard/owner/properties"); // TODO: fetch all properties by owner ID
+
     } catch (error) {
       // Error handled by mutation
     }

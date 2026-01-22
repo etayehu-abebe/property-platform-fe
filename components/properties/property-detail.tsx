@@ -85,7 +85,7 @@ export default function PropertyDetail({ property }: PropertyDetailProps) {
           {/* Main Content */}
           <main className="lg:w-2/3">
             {/* Image Gallery */}
-            <Card className="mb-8 overflow-hidden">
+            <Card className="mb-8 overflow-hidden pt-0">
               <div className="relative h-96 w-full">
                 {property.images.length > 0 ? (
                   <>
