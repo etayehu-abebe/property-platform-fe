@@ -15,7 +15,7 @@ export default async function PropertiesPage({
   // Extract filters from search params - USE params, not searchParams!
   const filters = {
     page: params?.page ? Number(params.page) : 1,
-    limit: params?.limit ? Number(params.limit) : 10,
+    limit: params?.limit ? Number(params.limit) : 12,
     status: params?.status as string | undefined,
     minPrice: params?.minPrice ? Number(params.minPrice) : undefined,
     maxPrice: params?.maxPrice ? Number(params.maxPrice) : undefined,
